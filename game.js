@@ -13,8 +13,8 @@ const bulletSound = new Audio('Gunshot.mp3');
 
 let survivor, gameOver, gamePaused, tracing, traceStartX, traceStartY, traceEndX, traceEndY, score, timeRemaining, zombies, bullets, blocks;
 const zombieSpeed = 1;
-const bulletSpeed = 5;
-const gravity = 0.2;
+const bulletSpeed = 7;
+const gravity = 0.3;
 const jumpStrength = -5;
 const keys = {};
 const blockHealth = 3; // Blocks can take 3 hits before being destroyed
@@ -75,7 +75,7 @@ function drawSurvivor() {
     const healthBarWidth = 50;
     const healthBarHeight = 5;
     const healthBarX = survivor.x - healthBarWidth / 2;
-    const healthBarY = survivor.y - survivor.height - 20; // Height above the survivor's head
+    const healthBarY = survivor.y - survivor.height - 30; // Height above the survivor's head
     drawRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight, 'red');
     drawRect(healthBarX, healthBarY, (survivor.health / 200) * healthBarWidth, healthBarHeight, 'green');
 }
@@ -153,7 +153,7 @@ function update() {
         if (zombie.y === survivor.y &&
             zombie.x + zombie.width > survivor.x - survivor.width / 2 &&
             zombie.x < survivor.x + survivor.width / 2) {
-            survivor.health -= 10; // Zombie damages the survivor
+            survivor.health -= 2; // Zombie damages the survivor
             if (survivor.health <= 0) survivor.isAlive = false;
         }
     });
