@@ -21,6 +21,19 @@ const blockHealth = 3; // Blocks can take 3 hits before being destroyed
 const shootingCooldown = 300; // 300ms cooldown for shooting
 let lastShootTime = 0;
 
+const pauseButton = document.getElementById('pauseButton');
+
+pauseButton.addEventListener('click', () => {
+    gamePaused = !gamePaused;
+    pauseButton.innerText = gamePaused ? 'Resume' : 'Pause';
+});
+
+let survivorImage = new Image();
+survivorImage.src = 'SLDR1.avif';
+
+let zombieImage = new Image();
+zombieImage.src = 'Zicon.png';
+
 function initGame() {
     survivor = {
         x: canvas.width / 2,
@@ -49,12 +62,8 @@ function initGame() {
     blocks = [
         { x: survivor.x - 90, y: GROUND_LEVEL - 30, width: 30, height: 30, health: blockHealth },
         { x: survivor.x - 60, y: GROUND_LEVEL - 30, width: 30, height: 30, health: blockHealth },
-        { x: survivor.x - 90, y: GROUND_LEVEL - 60, width: 30, height: 30, health: blockHealth },
-        { x: survivor.x - 60, y: GROUND_LEVEL - 60, width: 30, height: 30, health: blockHealth },
         { x: survivor.x + 60, y: GROUND_LEVEL - 30, width: 30, height: 30, health: blockHealth },
         { x: survivor.x + 90, y: GROUND_LEVEL - 30, width: 30, height: 30, health: blockHealth },
-        { x: survivor.x + 60, y: GROUND_LEVEL - 60, width: 30, height: 30, health: blockHealth },
-        { x: survivor.x + 90, y: GROUND_LEVEL - 60, width: 30, height: 30, health: blockHealth }
     ];
 
     document.getElementById('scoreValue').innerText = score;
@@ -68,8 +77,8 @@ function drawRect(x, y, width, height, color) {
 }
 
 function drawSurvivor() {
-    drawRect(survivor.x - survivor.width / 2, survivor.y - survivor.height, survivor.width, survivor.height, 'blue'); // Body
-    drawRect(survivor.x - survivor.width / 4, survivor.y - survivor.height - 10, survivor.width / 2, 10, 'blue'); // Head
+    // Draw survivor image
+    ctx.drawImage(survivorImage, survivor.x - survivor.width / 2, survivor.y - survivor.height, survivor.width, survivor.height);
 
     // Draw health bar
     const healthBarWidth = 50;
@@ -81,8 +90,8 @@ function drawSurvivor() {
 }
 
 function drawZombie(zombie) {
-    drawRect(zombie.x, zombie.y - zombie.height, zombie.width, zombie.height, 'green'); // Body
-    drawRect(zombie.x + zombie.width / 4, zombie.y - zombie.height - 10, zombie.width / 2, 10, 'green'); // Head
+    // Draw zombie image
+    ctx.drawImage(zombieImage, zombie.x, zombie.y - zombie.height, zombie.width, zombie.height);
 }
 
 function drawBullet(bullet) {
@@ -183,7 +192,6 @@ function update() {
         }
     });
 
-    
     // Handle survivor movement
     if (keys['ArrowLeft'] && survivor.x > survivor.width / 2) {
         // Check if there's a block to the left of the survivor
@@ -222,6 +230,7 @@ function update() {
         survivor.onGround = false;
     }
 }
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(backgroundImage, 0, 0, GAME_WIDTH, GAME_HEIGHT); // Draw the background image
@@ -332,4 +341,3 @@ setInterval(() => {
 backgroundImage.onload = () => {
     initGame();
 };
-
